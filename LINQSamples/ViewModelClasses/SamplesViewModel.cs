@@ -59,12 +59,13 @@ namespace LINQSamples
             if (UseQuerySyntax)
             {
                 // Query Syntax
-
+                value = (from prod in Products
+                         select prod).Count(prod => prod.Color == search);
             }
             else
             {
                 // Method Syntax
-
+                value = Products.Count(prod => prod.Color == search);
             }
 
             ResultText = $"Total Products with a color of 'Red' = {value}";
