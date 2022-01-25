@@ -147,12 +147,16 @@ namespace LINQSamples
             if (UseQuerySyntax)
             {
                 // Query Syntax
-
+                value = (from prod in Products
+                         select prod.ListPrice).Max();
+                //// alternate syntax
+                //value = (from prod in Products
+                //         select prod).Max(prod => prod.ListPrice);
             }
             else
             {
                 // Method Syntax
-
+                value = Products.Max(prod => prod.ListPrice);
             }
 
             if (value.HasValue)
