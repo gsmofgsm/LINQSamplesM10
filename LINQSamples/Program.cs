@@ -14,7 +14,7 @@ namespace LINQSamples
       };
 
       // Call a sample method
-      vm.AggregateAColor();
+      vm.Count();
 
       // Display Result Text
       Console.WriteLine(vm.ResultText);
