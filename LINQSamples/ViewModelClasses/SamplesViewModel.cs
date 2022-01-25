@@ -181,12 +181,16 @@ namespace LINQSamples
             if (UseQuerySyntax)
             {
                 // Query Syntax
-
+                value = (from prod in Products
+                         select prod.ListPrice).Average();
+                //// alternate syntax
+                //value = (from prod in Products
+                //         select prod).Average(prod => prod.ListPrice);
             }
             else
             {
                 // Method Syntax
-
+                value = Products.Average(prod => prod.ListPrice);
             }
 
             if (value.HasValue)

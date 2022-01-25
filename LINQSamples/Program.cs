@@ -17,7 +17,8 @@ namespace LINQSamples
             //vm.Count();
             //vm.CountFiltered();
             //vm.Minimum();
-            vm.Maximum();
+            //vm.Maximum();
+            vm.Average();
 
             // Display Result Text
             Console.WriteLine(vm.ResultText);
