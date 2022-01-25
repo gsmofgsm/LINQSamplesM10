@@ -83,12 +83,16 @@ namespace LINQSamples
             if (UseQuerySyntax)
             {
                 // Query Syntax
-
+                value = (from prod in Products
+                         select prod.ListPrice).Sum();
+                //// alternate syntax
+                //value = (from prod in Products
+                //         select prod).Sum(prod => prod.ListPrice);
             }
             else
             {
                 // Method Syntax
-
+                value = Products.Sum(prod => prod.ListPrice);
             }
 
             if (value.HasValue)
