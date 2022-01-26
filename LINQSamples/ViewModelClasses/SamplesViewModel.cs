@@ -287,26 +287,54 @@ namespace LINQSamples
             if (UseQuerySyntax)
             {
                 // Query syntax
+                var stats = (from prod in Products
+                             group prod by prod.Size into sizeGroup
+                             where sizeGroup.Count() > 0
+                             select new
+                             {
+                                 Size = sizeGroup.Key,
+                                 TotalProducts = sizeGroup.Count(),
+                                 Max = sizeGroup.Max(s => s.ListPrice),
+                                 Min = sizeGroup.Min(s => s.ListPrice),
+                                 Average = sizeGroup.Average(s => s.ListPrice),
+                             }
+                             into result
+                             orderby result.Size
+                             select result);
 
                 // Loop through each product statistic
-                //foreach (var stat in stats) {
-                //  sb.AppendLine($"Size: {stat.Size}  Count: {stat.TotalProducts}");
-                //  sb.AppendLine($"  Min: {stat.Min:c}");
-                //  sb.AppendLine($"  Max: {stat.Max:c}");
-                //  sb.AppendLine($"  Average: {stat.Average:c}");
-                //}
+                foreach (var stat in stats)
+                {
+                    sb.AppendLine($"Size: {stat.Size}  Count: {stat.TotalProducts}");
+                    sb.AppendLine($"  Min: {stat.Min:c}");
+                    sb.AppendLine($"  Max: {stat.Max:c}");
+                    sb.AppendLine($"  Average: {stat.Average:c}");
+                }
             }
             else
             {
                 // Method syntax
+                var stats = Products.GroupBy(sale => sale.Size)
+                    .Where(sizeGroup => sizeGroup.Count() > 0)
+                    .Select(sizeGroup => new
+                    {
+                        Size = sizeGroup.Key,
+                        TotalProducts = sizeGroup.Count(),
+                        Max = sizeGroup.Max(s => s.ListPrice),
+                        Min = sizeGroup.Min(s => s.ListPrice),
+                        Average = sizeGroup.Average(s => s.ListPrice),
+                    })
+                    .OrderBy(result => result.Size)
+                    .Select(result => result);
 
                 // Loop through each product statistic
-                //foreach (var stat in stats) {
-                //  sb.AppendLine($"Size: {stat.Size}  Count: {stat.TotalProducts}");
-                //  sb.AppendLine($"  Min: {stat.Min:c}");
-                //  sb.AppendLine($"  Max: {stat.Max:c}");
-                //  sb.AppendLine($"  Average: {stat.Average:c}");
-                //}
+                foreach (var stat in stats)
+                {
+                    sb.AppendLine($"Size: {stat.Size}  Count: {stat.TotalProducts}");
+                    sb.AppendLine($"  Min: {stat.Min:c}");
+                    sb.AppendLine($"  Max: {stat.Max:c}");
+                    sb.AppendLine($"  Average: {stat.Average:c}");
+                }
             }
 
             ResultText = sb.ToString();
