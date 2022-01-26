@@ -352,14 +352,33 @@ namespace LINQSamples
             StringBuilder sb = new StringBuilder(2048);
 
             // Method syntax only
+            var stats = Products.GroupBy(sale => sale.Size)
+                .Where(sizeGroup => sizeGroup.Count() > 0)
+                .Select(sizeGroup =>
+                {
+                    var results = sizeGroup.Aggregate(new ProductStats(),
+                        (acc, prod) => acc.Accumulate(prod),
+                        acc => acc.ComputeAverage());
+                    return new
+                    {
+                        Size = sizeGroup.Key,
+                        results.TotalProducts,
+                        results.Min,
+                        results.Max,
+                        results.Average
+                    };
+                })
+                .OrderBy(result => result.Size)
+                .Select(result => result);
 
             // Loop through each product statistic
-            //foreach (var stat in stats) {
-            //  sb.AppendLine($"Size: {stat.Size}  Count: {stat.TotalProducts}");
-            //  sb.AppendLine($"  Min: {stat.Min:c}");
-            //  sb.AppendLine($"  Max: {stat.Max:c}");
-            //  sb.AppendLine($"  Average: {stat.Average:c}");
-            //}
+            foreach (var stat in stats)
+            {
+                sb.AppendLine($"Size: {stat.Size}  Count: {stat.TotalProducts}");
+                sb.AppendLine($"  Min: {stat.Min:c}");
+                sb.AppendLine($"  Max: {stat.Max:c}");
+                sb.AppendLine($"  Average: {stat.Average:c}");
+            }
 
             ResultText = sb.ToString();
         }
